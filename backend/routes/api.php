@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\AppointmentController;
 use App\Http\Controllers\Api\Admin\DoctorAvailabilityController;
 use App\Http\Controllers\Api\Admin\DoctorController;
 use App\Http\Controllers\Api\Admin\ServiceController;
@@ -25,6 +26,16 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::middleware('role:admin')->prefix('admin')->group(function (): void {
         Route::get('/dashboard', DashboardController::class);
+
+        Route::get('/appointments', [AppointmentController::class, 'index']);
+        Route::get('/appointments/{appointment}', [AppointmentController::class, 'show']);
+        Route::patch('/appointments/{appointment}/notes', [AppointmentController::class, 'updateNotes']);
+        Route::post('/appointments/{appointment}/approve', [AppointmentController::class, 'approve']);
+        Route::post('/appointments/{appointment}/reject', [AppointmentController::class, 'reject']);
+        Route::post('/appointments/{appointment}/reschedule', [AppointmentController::class, 'reschedule']);
+        Route::post('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel']);
+        Route::post('/appointments/{appointment}/complete', [AppointmentController::class, 'complete']);
+        Route::post('/appointments/{appointment}/no-show', [AppointmentController::class, 'noShow']);
 
         Route::get('/services', [ServiceController::class, 'index']);
         Route::post('/services', [ServiceController::class, 'store']);

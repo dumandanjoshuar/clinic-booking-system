@@ -6,6 +6,8 @@ import AdminDashboardView from '../views/admin/AdminDashboardView.vue'
 import AdminServicesView from '../views/admin/AdminServicesView.vue'
 import AdminDoctorsView from '../views/admin/AdminDoctorsView.vue'
 import AdminAvailabilityView from '../views/admin/AdminAvailabilityView.vue'
+import AdminAppointmentsView from '../views/admin/AdminAppointmentsView.vue'
+import AdminAppointmentDetailView from '../views/admin/AdminAppointmentDetailView.vue'
 import BookingView from '../views/public/BookingView.vue'
 import BookingSuccessView from '../views/public/BookingSuccessView.vue'
 
@@ -42,6 +44,16 @@ const routes = [
         path: 'dashboard',
         name: 'admin.dashboard',
         component: AdminDashboardView,
+      },
+      {
+        path: 'appointments',
+        name: 'admin.appointments',
+        component: AdminAppointmentsView,
+      },
+      {
+        path: 'appointments/:id',
+        name: 'admin.appointments.show',
+        component: AdminAppointmentDetailView,
       },
       {
         path: 'services',

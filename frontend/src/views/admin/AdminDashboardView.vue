@@ -8,9 +8,23 @@ const counts = ref({
   active_services: 0,
   active_doctors: 0,
   active_availability_rules: 0,
+  pending_appointments: 0,
+  today_appointments: 0,
 })
 
 const cards = [
+  {
+    key: 'pending_appointments',
+    label: 'Pending appointments',
+    icon: 'mdi-calendar-alert-outline',
+    color: 'warning',
+  },
+  {
+    key: 'today_appointments',
+    label: 'Today appointments',
+    icon: 'mdi-calendar-today-outline',
+    color: 'primary',
+  },
   {
     key: 'active_services',
     label: 'Active services',
@@ -52,7 +66,7 @@ onMounted(loadDashboard)
   <div>
     <div class="mb-6">
       <div class="page-title">Dashboard</div>
-      <div class="page-subtitle mt-1">Phase 1 setup status for the clinic booking system.</div>
+      <div class="page-subtitle mt-1">Clinic setup and appointment activity at a glance.</div>
     </div>
 
     <v-alert
@@ -70,6 +84,7 @@ onMounted(loadDashboard)
         :key="card.key"
         cols="12"
         md="4"
+        lg="3"
       >
         <v-card rounded="lg" elevation="1">
           <v-card-text class="d-flex align-center justify-space-between pa-6">

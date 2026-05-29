@@ -37,6 +37,17 @@ class AppointmentResource extends JsonResource
                 'name' => $this->service->name,
                 'duration_minutes' => $this->service->duration_minutes,
             ]),
+            'status_logs' => $this->whenLoaded('statusLogs', fn () => $this->statusLogs->map(fn ($log) => [
+                'id' => $log->id,
+                'old_status' => $log->old_status,
+                'new_status' => $log->new_status,
+                'notes' => $log->notes,
+                'changed_by' => $log->relationLoaded('changedBy') && $log->changedBy ? [
+                    'id' => $log->changedBy->id,
+                    'name' => $log->changedBy->name,
+                ] : null,
+                'created_at' => $log->created_at?->toISOString(),
+            ])->values()),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];

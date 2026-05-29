@@ -10,6 +10,7 @@ use App\Models\AppointmentStatusLog;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Service;
+use App\Services\AppointmentNotificationService;
 use App\Services\AppointmentSlotService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -17,8 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BookingController extends Controller
 {
-    public function store(StoreAppointmentRequest $request, AppointmentSlotService $slotService): JsonResponse
-    {
+    public function store(
+        StoreAppointmentRequest $request,
+        AppointmentSlotService $slotService,
+        AppointmentNotificationService $notificationService,
+    ): JsonResponse {
         $data = $request->validated();
         $service = Service::query()->where('is_active', true)->findOrFail($data['service_id']);
         $doctor = Doctor::query()->where('is_active', true)->findOrFail($data['doctor_id']);
@@ -65,6 +69,8 @@ class BookingController extends Controller
 
             return $appointment;
         });
+
+        $notificationService->bookingSubmitted($appointment->load(['patient', 'doctor', 'service']));
 
         return response()->json([
             'message' => 'Appointment request submitted successfully.',

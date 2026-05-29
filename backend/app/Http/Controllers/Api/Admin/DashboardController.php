@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\DoctorAvailability;
 use App\Models\Service;
@@ -17,6 +18,8 @@ class DashboardController extends Controller
                 'active_services' => Service::query()->where('is_active', true)->count(),
                 'active_doctors' => Doctor::query()->where('is_active', true)->count(),
                 'active_availability_rules' => DoctorAvailability::query()->where('is_active', true)->count(),
+                'pending_appointments' => Appointment::query()->where('status', Appointment::STATUS_PENDING)->count(),
+                'today_appointments' => Appointment::query()->whereDate('appointment_date', now()->toDateString())->count(),
             ],
         ]);
     }
