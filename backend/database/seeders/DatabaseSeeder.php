@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(ClinicDemoSeeder::class);
+        $this->call(AdminUserSeeder::class);
+
+        if (filter_var(env('CLINIC_SEED_DEMO', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->call(ClinicDemoSeeder::class);
+        }
     }
 }

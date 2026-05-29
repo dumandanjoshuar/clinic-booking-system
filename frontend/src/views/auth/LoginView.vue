@@ -15,27 +15,6 @@ const form = reactive({
 
 const error = ref('')
 
-const demoAccounts = [
-  {
-    label: 'Admin / Staff',
-    description: 'Manage doctors, services, availability, and appointments.',
-    icon: 'mdi-shield-account',
-    email: 'admin@example.com',
-  },
-  {
-    label: 'Doctor',
-    description: 'View assigned schedule and complete appointments.',
-    icon: 'mdi-stethoscope',
-    email: 'maria.santos@example.com',
-  },
-]
-
-function useDemoAccount(account) {
-  form.email = account.email
-  form.password = 'password'
-  error.value = ''
-}
-
 async function submit() {
   error.value = ''
 
@@ -79,24 +58,6 @@ async function submit() {
             <div class="page-subtitle mt-2">
               Admin staff and doctors use this secure portal to access their workspace.
             </div>
-          </div>
-
-          <div class="d-grid ga-3 mb-6">
-            <v-btn
-              v-for="account in demoAccounts"
-              :key="account.email"
-              class="login-role-button justify-start text-none"
-              variant="flat"
-              color="surface"
-              height="64"
-              :prepend-icon="account.icon"
-              @click="useDemoAccount(account)"
-            >
-              <div class="text-left">
-                <div class="font-weight-bold">{{ account.label }}</div>
-                <div class="text-caption text-medium-emphasis">{{ account.email }}</div>
-              </div>
-            </v-btn>
           </div>
 
           <v-alert
