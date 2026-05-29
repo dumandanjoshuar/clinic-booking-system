@@ -15,6 +15,27 @@ const form = reactive({
 
 const error = ref('')
 
+const demoAccounts = [
+  {
+    label: 'Admin / Staff',
+    description: 'Manage doctors, services, availability, and appointments.',
+    icon: 'mdi-shield-account',
+    email: 'admin@example.com',
+  },
+  {
+    label: 'Doctor',
+    description: 'View assigned schedule and complete appointments.',
+    icon: 'mdi-stethoscope',
+    email: 'maria.santos@example.com',
+  },
+]
+
+function useDemoAccount(account) {
+  form.email = account.email
+  form.password = 'password'
+  error.value = ''
+}
+
 async function submit() {
   error.value = ''
 
@@ -35,13 +56,42 @@ async function submit() {
 </script>
 
 <template>
-  <v-main class="bg-background">
+  <v-main class="login-surface">
     <v-container class="d-flex align-center justify-center min-h-screen py-12">
-      <v-card width="440" rounded="lg" elevation="2">
+      <v-card width="480" rounded="lg" elevation="0" class="login-card">
         <v-card-text class="pa-8">
           <div class="mb-8">
-            <div class="page-title">Clinic Admin</div>
-            <div class="page-subtitle mt-2">Sign in to manage services, doctors, and availability.</div>
+            <div class="d-flex align-center ga-3 mb-5">
+              <div class="brand-mark">
+                <v-icon icon="mdi-hospital-building" />
+              </div>
+              <div>
+                <div class="font-weight-bold">Clinic Booking</div>
+                <div class="text-caption text-medium-emphasis">Secure staff access</div>
+              </div>
+            </div>
+            <div class="page-title">Staff Sign In</div>
+            <div class="page-subtitle mt-2">
+              Admin staff and doctors use this secure portal to access their workspace.
+            </div>
+          </div>
+
+          <div class="d-grid ga-3 mb-6">
+            <v-btn
+              v-for="account in demoAccounts"
+              :key="account.email"
+              class="login-role-button justify-start text-none"
+              variant="flat"
+              color="surface"
+              height="64"
+              :prepend-icon="account.icon"
+              @click="useDemoAccount(account)"
+            >
+              <div class="text-left">
+                <div class="font-weight-bold">{{ account.label }}</div>
+                <div class="text-caption text-medium-emphasis">{{ account.email }}</div>
+              </div>
+            </v-btn>
           </div>
 
           <v-alert

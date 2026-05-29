@@ -86,7 +86,7 @@ onMounted(loadDashboard)
         md="4"
         lg="3"
       >
-        <v-card rounded="lg" elevation="1">
+        <v-card rounded="lg" elevation="0" class="metric-card">
           <v-card-text class="d-flex align-center justify-space-between pa-6">
             <div>
               <div class="text-medium-emphasis text-body-2">{{ card.label }}</div>

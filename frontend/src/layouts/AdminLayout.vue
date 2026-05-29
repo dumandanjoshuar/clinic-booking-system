@@ -30,21 +30,22 @@ async function signOut() {
 </script>
 
 <template>
-  <v-navigation-drawer width="268" color="surface" border permanent>
-    <div class="pa-5">
+  <v-navigation-drawer width="284" color="surface" class="app-sidebar" permanent>
+    <div class="pa-5 pb-4">
       <div class="d-flex align-center ga-3">
-        <v-avatar color="primary" rounded="lg">
+        <div class="brand-mark">
           <v-icon icon="mdi-hospital-building" />
-        </v-avatar>
+        </div>
         <div>
           <div class="font-weight-bold">Clinic Booking</div>
-          <div class="text-caption text-medium-emphasis">Admin workspace</div>
+          <div class="text-caption text-medium-emphasis">Operations console</div>
         </div>
       </div>
     </div>
 
     <v-divider />
 
+    <div class="sidebar-section-label px-5 pt-5 pb-2">Workspace</div>
     <v-list nav density="comfortable" class="pa-3">
       <v-list-item
         v-for="item in navItems"
@@ -53,18 +54,20 @@ async function signOut() {
         :prepend-icon="item.icon"
         :title="item.title"
         rounded="lg"
+        color="primary"
       />
     </v-list>
 
     <template #append>
-      <div class="pa-4">
-        <div class="d-flex align-center ga-3 mb-3">
-          <v-avatar color="secondary" size="36">{{ initials }}</v-avatar>
+      <div class="pa-4 ma-3 panel-card rounded-lg">
+        <div class="d-flex align-center ga-3 mb-4">
+          <v-avatar color="secondary" variant="tonal" size="38">{{ initials }}</v-avatar>
           <div class="overflow-hidden">
             <div class="text-body-2 font-weight-medium text-truncate">{{ state.user?.name }}</div>
             <div class="text-caption text-medium-emphasis text-truncate">{{ state.user?.email }}</div>
           </div>
         </div>
+        <div class="role-badge d-inline-flex mb-3">Admin / Staff</div>
         <v-btn
           variant="tonal"
           color="primary"
@@ -78,12 +81,18 @@ async function signOut() {
     </template>
   </v-navigation-drawer>
 
-  <v-app-bar flat border color="surface">
-    <v-app-bar-title class="font-weight-semibold">Clinic appointment MVP</v-app-bar-title>
+  <v-app-bar flat border color="surface" height="68">
+    <v-app-bar-title>
+      <div class="topbar-title">Clinic appointment system</div>
+      <div class="text-caption text-medium-emphasis">Admin workspace</div>
+    </v-app-bar-title>
+    <v-btn to="/booking" variant="tonal" color="primary" prepend-icon="mdi-calendar-plus" class="mr-4">
+      Public booking
+    </v-btn>
   </v-app-bar>
 
-  <v-main class="bg-background">
-    <v-container fluid class="pa-6">
+  <v-main class="app-shell">
+    <v-container fluid class="pa-6 app-container">
       <router-view />
     </v-container>
   </v-main>

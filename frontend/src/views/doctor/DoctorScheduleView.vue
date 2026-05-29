@@ -80,7 +80,7 @@ onMounted(loadAppointments)
       </v-btn>
     </div>
 
-    <v-card rounded="lg" elevation="1" class="mb-5">
+    <v-card rounded="lg" elevation="0" class="panel-card mb-5">
       <v-card-text>
         <v-row align="center">
           <v-col cols="12" md="5">
@@ -97,7 +97,7 @@ onMounted(loadAppointments)
       </v-card-text>
     </v-card>
 
-    <v-card rounded="lg" elevation="1">
+    <v-card rounded="lg" elevation="0" class="panel-card">
       <v-table>
         <thead>
           <tr>
