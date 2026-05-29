@@ -22,7 +22,7 @@ const snackbar = reactive({
 })
 const filters = reactive({
   date: '',
-  status: 'confirmed',
+  status: null,
 })
 
 const cards = [
@@ -58,7 +58,7 @@ function statusColor(status) {
 
 function clearFilters() {
   filters.date = ''
-  filters.status = 'confirmed'
+  filters.status = null
 }
 
 function updateTimestamp() {
