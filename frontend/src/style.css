@@ -38,6 +38,10 @@ a {
   text-align: center;
 }
 
+.min-h-screen {
+  min-height: 100vh;
+}
+
 .status-dot {
   width: 8px;
   height: 8px;

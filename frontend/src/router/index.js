@@ -6,11 +6,23 @@ import AdminDashboardView from '../views/admin/AdminDashboardView.vue'
 import AdminServicesView from '../views/admin/AdminServicesView.vue'
 import AdminDoctorsView from '../views/admin/AdminDoctorsView.vue'
 import AdminAvailabilityView from '../views/admin/AdminAvailabilityView.vue'
+import BookingView from '../views/public/BookingView.vue'
+import BookingSuccessView from '../views/public/BookingSuccessView.vue'
 
 const routes = [
   {
     path: '/',
-    redirect: '/admin/dashboard',
+    redirect: '/booking',
+  },
+  {
+    path: '/booking',
+    name: 'booking',
+    component: BookingView,
+  },
+  {
+    path: '/booking/success',
+    name: 'booking.success',
+    component: BookingSuccessView,
   },
   {
     path: '/login',

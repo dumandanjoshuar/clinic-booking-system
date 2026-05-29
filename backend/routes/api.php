@@ -5,9 +5,19 @@ use App\Http\Controllers\Api\Admin\DoctorAvailabilityController;
 use App\Http\Controllers\Api\Admin\DoctorController;
 use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Public\AvailableSlotController;
+use App\Http\Controllers\Api\Public\BookingController;
+use App\Http\Controllers\Api\Public\PublicCatalogController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/auth/login', [AuthController::class, 'login']);
+
+Route::prefix('public')->group(function (): void {
+    Route::get('/services', [PublicCatalogController::class, 'services']);
+    Route::get('/doctors', [PublicCatalogController::class, 'doctors']);
+    Route::get('/available-slots', AvailableSlotController::class);
+    Route::post('/appointments', [BookingController::class, 'store']);
+});
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/auth/me', [AuthController::class, 'me']);
