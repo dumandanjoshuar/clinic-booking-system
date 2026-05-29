@@ -76,6 +76,17 @@ class AppointmentNotificationService
 
     private function sendRawMail(string $to, string $subject, string $body): void
     {
+        if (! app()->runningInConsole()) {
+            app()->terminating(fn () => $this->deliverRawMail($to, $subject, $body));
+
+            return;
+        }
+
+        $this->deliverRawMail($to, $subject, $body);
+    }
+
+    private function deliverRawMail(string $to, string $subject, string $body): void
+    {
         try {
             Mail::raw($body, fn ($message) => $message->to($to)->subject($subject));
         } catch (Throwable $exception) {
