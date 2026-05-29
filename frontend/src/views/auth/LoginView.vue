@@ -21,12 +21,13 @@ async function submit() {
   try {
     const user = await login(form)
 
-    if (user.role !== 'admin') {
-      error.value = 'This dashboard is currently available for admin users only.'
-      return
-    }
+    const fallback = user.role === 'doctor' ? '/doctor/dashboard' : '/admin/dashboard'
+    const requested = typeof route.query.redirect === 'string' ? route.query.redirect : ''
+    const canUseRedirect = user.role === 'doctor'
+      ? requested.startsWith('/doctor')
+      : requested.startsWith('/admin')
 
-    await router.push(route.query.redirect || '/admin/dashboard')
+    await router.push(canUseRedirect ? requested : fallback)
   } catch (err) {
     error.value = getErrorMessage(err)
   }

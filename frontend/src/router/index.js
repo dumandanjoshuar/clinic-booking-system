@@ -8,6 +8,10 @@ import AdminDoctorsView from '../views/admin/AdminDoctorsView.vue'
 import AdminAvailabilityView from '../views/admin/AdminAvailabilityView.vue'
 import AdminAppointmentsView from '../views/admin/AdminAppointmentsView.vue'
 import AdminAppointmentDetailView from '../views/admin/AdminAppointmentDetailView.vue'
+import DoctorLayout from '../layouts/DoctorLayout.vue'
+import DoctorDashboardView from '../views/doctor/DoctorDashboardView.vue'
+import DoctorScheduleView from '../views/doctor/DoctorScheduleView.vue'
+import DoctorAppointmentDetailView from '../views/doctor/DoctorAppointmentDetailView.vue'
 import BookingView from '../views/public/BookingView.vue'
 import BookingSuccessView from '../views/public/BookingSuccessView.vue'
 
@@ -69,6 +73,32 @@ const routes = [
         path: 'availability',
         name: 'admin.availability',
         component: AdminAvailabilityView,
+      },
+    ],
+  },
+  {
+    path: '/doctor',
+    component: DoctorLayout,
+    meta: { requiresAuth: true, role: 'doctor' },
+    children: [
+      {
+        path: '',
+        redirect: '/doctor/dashboard',
+      },
+      {
+        path: 'dashboard',
+        name: 'doctor.dashboard',
+        component: DoctorDashboardView,
+      },
+      {
+        path: 'schedule',
+        name: 'doctor.schedule',
+        component: DoctorScheduleView,
+      },
+      {
+        path: 'appointments/:id',
+        name: 'doctor.appointments.show',
+        component: DoctorAppointmentDetailView,
       },
     ],
   },

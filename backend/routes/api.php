@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Admin\DoctorAvailabilityController;
 use App\Http\Controllers\Api\Admin\DoctorController;
 use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Doctor\DoctorAppointmentController;
+use App\Http\Controllers\Api\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Api\Public\AvailableSlotController;
 use App\Http\Controllers\Api\Public\BookingController;
 use App\Http\Controllers\Api\Public\PublicCatalogController;
@@ -54,5 +56,12 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('/availability/{doctorAvailability}', [DoctorAvailabilityController::class, 'show']);
         Route::put('/availability/{doctorAvailability}', [DoctorAvailabilityController::class, 'update']);
         Route::delete('/availability/{doctorAvailability}', [DoctorAvailabilityController::class, 'destroy']);
+    });
+
+    Route::middleware('role:doctor')->prefix('doctor')->group(function (): void {
+        Route::get('/dashboard', DoctorDashboardController::class);
+        Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
+        Route::get('/appointments/{appointment}', [DoctorAppointmentController::class, 'show']);
+        Route::post('/appointments/{appointment}/complete', [DoctorAppointmentController::class, 'complete']);
     });
 });
