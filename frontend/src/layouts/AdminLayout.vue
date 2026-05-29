@@ -86,8 +86,8 @@ async function signOut() {
       <div class="topbar-title">Clinic appointment system</div>
       <div class="text-caption text-medium-emphasis">Admin workspace</div>
     </v-app-bar-title>
-    <v-btn to="/booking" variant="tonal" color="primary" prepend-icon="mdi-calendar-plus" class="mr-4">
-      Public booking
+    <v-btn to="/admin/appointments?new=1" variant="tonal" color="primary" prepend-icon="mdi-calendar-plus" class="mr-4">
+      New appointment
     </v-btn>
   </v-app-bar>
 

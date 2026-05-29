@@ -1,9 +1,11 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../../composables/useAuth'
 import api, { getErrorMessage } from '../../services/api'
 
 const router = useRouter()
+const { state, fetchMe } = useAuth()
 const services = ref([])
 const doctors = ref([])
 const slots = ref([])
@@ -52,6 +54,14 @@ const canSubmit = computed(() => Boolean(
     && form.patient.email
     && form.patient.phone,
 ))
+const staffDestination = computed(() => {
+  if (state.user?.role === 'doctor') {
+    return '/doctor/dashboard'
+  }
+
+  return '/admin/dashboard'
+})
+const staffButtonText = computed(() => (state.user ? 'Back to workspace' : 'Staff login'))
 
 function notify(text, color = 'success') {
   snackbar.text = text
@@ -143,6 +153,16 @@ watch(
 )
 
 onMounted(async () => {
+  if (state.token && !state.user) {
+    try {
+      await fetchMe()
+    } catch {
+      localStorage.removeItem('clinic_auth_token')
+      state.token = null
+      state.user = null
+    }
+  }
+
   await loadCatalog()
   await loadSlots()
 })
@@ -158,8 +178,8 @@ onMounted(async () => {
             Submit a request and clinic staff will confirm your schedule.
           </div>
         </div>
-        <v-btn to="/login" variant="tonal" color="primary" prepend-icon="mdi-shield-account">
-          Staff login
+        <v-btn :to="state.user ? staffDestination : '/login'" variant="tonal" color="primary" prepend-icon="mdi-shield-account">
+          {{ staffButtonText }}
         </v-btn>
       </div>
 
