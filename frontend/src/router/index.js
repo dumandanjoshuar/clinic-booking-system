@@ -12,7 +12,6 @@ const AdminAppointmentsView = () => import('../views/admin/AdminAppointmentsView
 const AdminAppointmentDetailView = () => import('../views/admin/AdminAppointmentDetailView.vue')
 const DoctorLayout = () => import('../layouts/DoctorLayout.vue')
 const DoctorDashboardView = () => import('../views/doctor/DoctorDashboardView.vue')
-const DoctorScheduleView = () => import('../views/doctor/DoctorScheduleView.vue')
 const DoctorAppointmentDetailView = () => import('../views/doctor/DoctorAppointmentDetailView.vue')
 const BookingView = () => import('../views/public/BookingView.vue')
 const BookingSuccessView = () => import('../views/public/BookingSuccessView.vue')
@@ -100,8 +99,7 @@ const routes = [
       },
       {
         path: 'schedule',
-        name: 'doctor.schedule',
-        component: DoctorScheduleView,
+        redirect: '/doctor/dashboard',
       },
       {
         path: 'appointments/:id',

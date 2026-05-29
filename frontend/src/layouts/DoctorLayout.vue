@@ -17,7 +17,6 @@ const initials = computed(() => {
 
 const navItems = [
   { title: 'Dashboard', icon: 'mdi-view-dashboard-outline', to: '/doctor/dashboard' },
-  { title: 'Schedule', icon: 'mdi-calendar-clock', to: '/doctor/schedule' },
 ]
 
 async function signOut() {
