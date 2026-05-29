@@ -20,6 +20,8 @@ class StoreDoctorRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:50'],
             'specialization' => ['nullable', 'string', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
+            'create_user_account' => ['sometimes', 'boolean'],
+            'temporary_password' => ['nullable', 'required_if:create_user_account,true', 'string', 'min:8'],
         ];
     }
 }

@@ -7,8 +7,8 @@ use App\Http\Requests\Admin\StoreServiceRequest;
 use App\Http\Requests\Admin\UpdateServiceRequest;
 use App\Http\Resources\ServiceResource;
 use App\Models\Service;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 
 class ServiceController extends Controller
 {
@@ -46,10 +46,32 @@ class ServiceController extends Controller
         return ServiceResource::make($service->fresh());
     }
 
-    public function destroy(Service $service): Response
+    public function destroy(Service $service): JsonResponse
+    {
+        if (! $service->appointments()->exists()) {
+            $service->delete();
+
+            return response()->json([
+                'message' => 'Service deleted successfully.',
+                'action' => 'deleted',
+            ]);
+        }
+
+        $service->update(['is_active' => false]);
+
+        return response()->json([
+            'message' => 'Service has appointment history, so it was deactivated instead of deleted.',
+            'action' => 'deactivated',
+        ]);
+    }
+
+    public function deactivate(Service $service): JsonResponse
     {
         $service->update(['is_active' => false]);
 
-        return response()->noContent();
+        return response()->json([
+            'message' => 'Service deactivated successfully.',
+            'action' => 'deactivated',
+        ]);
     }
 }

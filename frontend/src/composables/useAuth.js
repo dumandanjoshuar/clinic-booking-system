@@ -45,10 +45,23 @@ export function useAuth() {
     }
   }
 
+  async function changePassword(payload) {
+    state.loading = true
+
+    try {
+      const { data } = await api.post('/auth/change-password', payload)
+      state.user = data.user
+      return data.user
+    } finally {
+      state.loading = false
+    }
+  }
+
   return {
     state,
     login,
     logout,
     fetchMe,
+    changePassword,
   }
 }

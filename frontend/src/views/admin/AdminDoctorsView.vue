@@ -20,6 +20,8 @@ const emptyForm = {
   phone: '',
   specialization: '',
   is_active: true,
+  create_user_account: false,
+  temporary_password: '',
 }
 
 const form = reactive({ ...emptyForm })
@@ -62,6 +64,8 @@ function openEditDialog(doctor) {
     phone: doctor.phone || '',
     specialization: doctor.specialization || '',
     is_active: doctor.is_active,
+    create_user_account: false,
+    temporary_password: '',
   })
   dialog.value = true
 }
@@ -74,6 +78,8 @@ async function saveDoctor() {
     email: form.email || null,
     phone: form.phone || null,
     specialization: form.specialization || null,
+    create_user_account: form.create_user_account,
+    temporary_password: form.temporary_password || null,
   }
 
   try {
@@ -82,7 +88,7 @@ async function saveDoctor() {
       notify('Doctor updated.')
     } else {
       await api.post('/admin/doctors', payload)
-      notify('Doctor created.')
+      notify(form.create_user_account ? 'Doctor created with login access.' : 'Doctor created.')
     }
 
     dialog.value = false
@@ -95,17 +101,17 @@ async function saveDoctor() {
   }
 }
 
-function askDeactivate(doctor) {
+function askDelete(doctor) {
   selectedDoctor.value = doctor
   confirmDialog.value = true
 }
 
-async function deactivateDoctor() {
+async function deleteDoctor() {
   saving.value = true
 
   try {
-    await api.delete(`/admin/doctors/${selectedDoctor.value.id}`)
-    notify('Doctor deactivated.')
+    const { data } = await api.delete(`/admin/doctors/${selectedDoctor.value.id}`)
+    notify(data.message || 'Doctor removed.')
     confirmDialog.value = false
     selectedDoctor.value = null
     await loadDoctors()
@@ -157,6 +163,9 @@ onMounted(loadDoctors)
               <div v-if="doctor.user" class="text-caption text-medium-emphasis">
                 Linked to {{ doctor.user.email }}
               </div>
+              <div v-else class="text-caption text-medium-emphasis">
+                No dashboard login
+              </div>
             </td>
             <td>{{ doctor.specialization || 'Not set' }}</td>
             <td>
@@ -175,12 +184,11 @@ onMounted(loadDoctors)
             <td class="text-right">
               <v-btn icon="mdi-pencil" variant="text" size="small" @click="openEditDialog(doctor)" />
               <v-btn
-                icon="mdi-close-circle-outline"
+                icon="mdi-trash-can-outline"
                 variant="text"
                 size="small"
                 color="error"
-                :disabled="!doctor.is_active"
-                @click="askDeactivate(doctor)"
+                @click="askDelete(doctor)"
               />
             </td>
           </tr>
@@ -204,6 +212,30 @@ onMounted(loadDoctors)
               <v-text-field v-model="form.phone" label="Phone" variant="outlined" density="comfortable" />
             </v-col>
           </v-row>
+          <v-divider class="my-4" />
+          <v-switch
+            v-model="form.create_user_account"
+            color="primary"
+            :disabled="isEditing && Boolean(selectedDoctor?.user)"
+            label="Create doctor dashboard login"
+            hide-details
+          />
+          <v-alert
+            v-if="form.create_user_account"
+            type="info"
+            variant="tonal"
+            class="my-4"
+          >
+            The doctor will sign in with this email and temporary password, then must change it immediately.
+          </v-alert>
+          <v-text-field
+            v-if="form.create_user_account"
+            v-model="form.temporary_password"
+            label="Temporary password"
+            type="text"
+            variant="outlined"
+            density="comfortable"
+          />
           <v-switch v-model="form.is_active" color="primary" label="Active" hide-details />
         </v-card-text>
         <v-card-actions class="px-6 pb-6">
@@ -216,14 +248,14 @@ onMounted(loadDoctors)
 
     <v-dialog v-model="confirmDialog" max-width="420">
       <v-card rounded="lg">
-        <v-card-title>Deactivate doctor?</v-card-title>
+        <v-card-title>Delete doctor?</v-card-title>
         <v-card-text>
-          This doctor will no longer be available for new scheduling rules or bookings.
+          If this doctor has no appointment history, the doctor and linked login account will be deleted. Otherwise, the doctor will be deactivated to preserve appointment history.
         </v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn variant="text" @click="confirmDialog = false">Cancel</v-btn>
-          <v-btn color="error" :loading="saving" @click="deactivateDoctor">Deactivate</v-btn>
+          <v-btn color="error" :loading="saving" @click="deleteDoctor">Continue</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

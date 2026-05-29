@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
 const LoginView = () => import('../views/auth/LoginView.vue')
+const ChangePasswordView = () => import('../views/auth/ChangePasswordView.vue')
 const AdminLayout = () => import('../layouts/AdminLayout.vue')
 const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
 const AdminServicesView = () => import('../views/admin/AdminServicesView.vue')
@@ -35,6 +36,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+  },
+  {
+    path: '/change-password',
+    name: 'change-password',
+    component: ChangePasswordView,
+    meta: { requiresAuth: true },
   },
   {
     path: '/admin',
@@ -134,6 +141,14 @@ router.beforeEach(async (to) => {
 
   if (to.meta.role && state.user?.role !== to.meta.role) {
     return { name: 'login' }
+  }
+
+  if (state.user?.must_change_password && to.name !== 'change-password') {
+    return { name: 'change-password' }
+  }
+
+  if (!state.user?.must_change_password && to.name === 'change-password') {
+    return state.user?.role === 'doctor' ? { name: 'doctor.dashboard' } : { name: 'admin.dashboard' }
   }
 
   return true

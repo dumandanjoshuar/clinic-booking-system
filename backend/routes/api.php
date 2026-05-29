@@ -24,9 +24,10 @@ Route::prefix('public')->group(function (): void {
 
 Route::middleware('auth:sanctum')->group(function (): void {
     Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-    Route::middleware('role:admin')->prefix('admin')->group(function (): void {
+    Route::middleware(['password.changed', 'role:admin'])->prefix('admin')->group(function (): void {
         Route::get('/dashboard', DashboardController::class);
 
         Route::get('/appointments', [AppointmentController::class, 'index']);
@@ -43,22 +44,25 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/services', [ServiceController::class, 'store']);
         Route::get('/services/{service}', [ServiceController::class, 'show']);
         Route::put('/services/{service}', [ServiceController::class, 'update']);
+        Route::patch('/services/{service}/deactivate', [ServiceController::class, 'deactivate']);
         Route::delete('/services/{service}', [ServiceController::class, 'destroy']);
 
         Route::get('/doctors', [DoctorController::class, 'index']);
         Route::post('/doctors', [DoctorController::class, 'store']);
         Route::get('/doctors/{doctor}', [DoctorController::class, 'show']);
         Route::put('/doctors/{doctor}', [DoctorController::class, 'update']);
+        Route::patch('/doctors/{doctor}/deactivate', [DoctorController::class, 'deactivate']);
         Route::delete('/doctors/{doctor}', [DoctorController::class, 'destroy']);
 
         Route::get('/availability', [DoctorAvailabilityController::class, 'index']);
         Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
         Route::get('/availability/{doctorAvailability}', [DoctorAvailabilityController::class, 'show']);
         Route::put('/availability/{doctorAvailability}', [DoctorAvailabilityController::class, 'update']);
+        Route::patch('/availability/{doctorAvailability}/deactivate', [DoctorAvailabilityController::class, 'deactivate']);
         Route::delete('/availability/{doctorAvailability}', [DoctorAvailabilityController::class, 'destroy']);
     });
 
-    Route::middleware('role:doctor')->prefix('doctor')->group(function (): void {
+    Route::middleware(['password.changed', 'role:doctor'])->prefix('doctor')->group(function (): void {
         Route::get('/dashboard', DoctorDashboardController::class);
         Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
         Route::get('/appointments/{appointment}', [DoctorAppointmentController::class, 'show']);

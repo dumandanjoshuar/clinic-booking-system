@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -47,6 +48,25 @@ class AuthController extends Controller
         ]);
     }
 
+    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    {
+        if (! Hash::check($request->validated('current_password'), $request->user()->password)) {
+            return response()->json([
+                'message' => 'The temporary password is incorrect.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $request->user()->update([
+            'password' => $request->validated('password'),
+            'must_change_password' => false,
+        ]);
+
+        return response()->json([
+            'message' => 'Password changed successfully.',
+            'user' => $this->userPayload($request->user()->fresh()->loadMissing('doctor')),
+        ]);
+    }
+
     private function userPayload(User $user): array
     {
         return [
@@ -55,6 +75,7 @@ class AuthController extends Controller
             'email' => $user->email,
             'role' => $user->role,
             'doctor_id' => $user->doctor?->id,
+            'must_change_password' => $user->must_change_password,
         ];
     }
 }

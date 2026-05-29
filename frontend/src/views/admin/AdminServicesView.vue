@@ -94,17 +94,17 @@ async function saveService() {
   }
 }
 
-function askDeactivate(service) {
+function askDelete(service) {
   selectedService.value = service
   confirmDialog.value = true
 }
 
-async function deactivateService() {
+async function deleteService() {
   saving.value = true
 
   try {
-    await api.delete(`/admin/services/${selectedService.value.id}`)
-    notify('Service deactivated.')
+    const { data } = await api.delete(`/admin/services/${selectedService.value.id}`)
+    notify(data.message || 'Service removed.')
     confirmDialog.value = false
     selectedService.value = null
     await loadServices()
@@ -171,12 +171,11 @@ onMounted(loadServices)
             <td class="text-right">
               <v-btn icon="mdi-pencil" variant="text" size="small" @click="openEditDialog(service)" />
               <v-btn
-                icon="mdi-close-circle-outline"
+                icon="mdi-trash-can-outline"
                 variant="text"
                 size="small"
                 color="error"
-                :disabled="!service.is_active"
-                @click="askDeactivate(service)"
+                @click="askDelete(service)"
               />
             </td>
           </tr>
@@ -227,14 +226,14 @@ onMounted(loadServices)
 
     <v-dialog v-model="confirmDialog" max-width="420">
       <v-card rounded="lg">
-        <v-card-title>Deactivate service?</v-card-title>
+        <v-card-title>Delete service?</v-card-title>
         <v-card-text>
-          This service will no longer be available for new bookings.
+          If this service has no appointment history, it will be deleted. Otherwise, it will be deactivated to preserve appointment history.
         </v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn variant="text" @click="confirmDialog = false">Cancel</v-btn>
-          <v-btn color="error" :loading="saving" @click="deactivateService">Deactivate</v-btn>
+          <v-btn color="error" :loading="saving" @click="deleteService">Continue</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

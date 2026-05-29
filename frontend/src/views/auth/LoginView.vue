@@ -43,6 +43,11 @@ async function submit() {
     const user = await login(form)
 
     const fallback = user.role === 'doctor' ? '/doctor/dashboard' : '/admin/dashboard'
+    if (user.must_change_password) {
+      await router.push('/change-password')
+      return
+    }
+
     const requested = typeof route.query.redirect === 'string' ? route.query.redirect : ''
     const canUseRedirect = user.role === 'doctor'
       ? requested.startsWith('/doctor')

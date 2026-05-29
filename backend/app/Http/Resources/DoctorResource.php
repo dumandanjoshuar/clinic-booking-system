@@ -22,6 +22,7 @@ class DoctorResource extends JsonResource
                 'name' => $this->user->name,
                 'email' => $this->user->email,
                 'role' => $this->user->role,
+                'must_change_password' => $this->user->must_change_password,
             ]),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),

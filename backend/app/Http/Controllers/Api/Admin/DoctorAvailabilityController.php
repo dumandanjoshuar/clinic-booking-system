@@ -7,8 +7,8 @@ use App\Http\Requests\Admin\StoreDoctorAvailabilityRequest;
 use App\Http\Requests\Admin\UpdateDoctorAvailabilityRequest;
 use App\Http\Resources\DoctorAvailabilityResource;
 use App\Models\DoctorAvailability;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 
 class DoctorAvailabilityController extends Controller
 {
@@ -50,10 +50,23 @@ class DoctorAvailabilityController extends Controller
         return DoctorAvailabilityResource::make($doctorAvailability->fresh()->load('doctor'));
     }
 
-    public function destroy(DoctorAvailability $doctorAvailability): Response
+    public function destroy(DoctorAvailability $doctorAvailability): JsonResponse
+    {
+        $doctorAvailability->delete();
+
+        return response()->json([
+            'message' => 'Availability rule deleted successfully.',
+            'action' => 'deleted',
+        ]);
+    }
+
+    public function deactivate(DoctorAvailability $doctorAvailability): JsonResponse
     {
         $doctorAvailability->update(['is_active' => false]);
 
-        return response()->noContent();
+        return response()->json([
+            'message' => 'Availability rule deactivated successfully.',
+            'action' => 'deactivated',
+        ]);
     }
 }
