@@ -1,19 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
-import LoginView from '../views/auth/LoginView.vue'
-import AdminLayout from '../layouts/AdminLayout.vue'
-import AdminDashboardView from '../views/admin/AdminDashboardView.vue'
-import AdminServicesView from '../views/admin/AdminServicesView.vue'
-import AdminDoctorsView from '../views/admin/AdminDoctorsView.vue'
-import AdminAvailabilityView from '../views/admin/AdminAvailabilityView.vue'
-import AdminAppointmentsView from '../views/admin/AdminAppointmentsView.vue'
-import AdminAppointmentDetailView from '../views/admin/AdminAppointmentDetailView.vue'
-import DoctorLayout from '../layouts/DoctorLayout.vue'
-import DoctorDashboardView from '../views/doctor/DoctorDashboardView.vue'
-import DoctorScheduleView from '../views/doctor/DoctorScheduleView.vue'
-import DoctorAppointmentDetailView from '../views/doctor/DoctorAppointmentDetailView.vue'
-import BookingView from '../views/public/BookingView.vue'
-import BookingSuccessView from '../views/public/BookingSuccessView.vue'
+
+const LoginView = () => import('../views/auth/LoginView.vue')
+const AdminLayout = () => import('../layouts/AdminLayout.vue')
+const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
+const AdminServicesView = () => import('../views/admin/AdminServicesView.vue')
+const AdminDoctorsView = () => import('../views/admin/AdminDoctorsView.vue')
+const AdminAvailabilityView = () => import('../views/admin/AdminAvailabilityView.vue')
+const AdminAppointmentsView = () => import('../views/admin/AdminAppointmentsView.vue')
+const AdminAppointmentDetailView = () => import('../views/admin/AdminAppointmentDetailView.vue')
+const DoctorLayout = () => import('../layouts/DoctorLayout.vue')
+const DoctorDashboardView = () => import('../views/doctor/DoctorDashboardView.vue')
+const DoctorScheduleView = () => import('../views/doctor/DoctorScheduleView.vue')
+const DoctorAppointmentDetailView = () => import('../views/doctor/DoctorAppointmentDetailView.vue')
+const BookingView = () => import('../views/public/BookingView.vue')
+const BookingSuccessView = () => import('../views/public/BookingSuccessView.vue')
 
 const routes = [
   {
