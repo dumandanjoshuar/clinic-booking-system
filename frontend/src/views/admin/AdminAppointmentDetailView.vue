@@ -57,6 +57,20 @@ function statusColor(status) {
   }[status] || 'default'
 }
 
+function formatDateTime(value) {
+  if (!value) {
+    return 'Date unavailable'
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(new Date(value))
+}
+
 async function loadAppointment() {
   loading.value = true
 
@@ -245,7 +259,7 @@ onMounted(async () => {
                 size="small"
               >
                 <div class="font-weight-medium">{{ log.new_status }}</div>
-                <div class="text-caption text-medium-emphasis">{{ log.created_at }}</div>
+                <div class="text-caption text-medium-emphasis">{{ formatDateTime(log.created_at) }}</div>
                 <div v-if="log.notes" class="text-body-2 mt-1">{{ log.notes }}</div>
                 <div v-if="log.changed_by" class="text-caption text-medium-emphasis">
                   By {{ log.changed_by.name }}
